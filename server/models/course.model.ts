@@ -19,6 +19,7 @@ interface ILink extends Document {
 }
 
 interface ICourseData extends Document {
+  admin: object;
   title: string;
   description: string;
   videoUrl: string;

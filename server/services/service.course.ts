@@ -2,7 +2,7 @@ import { Response } from "express";
 import CourseModel from "../models/course.model";
 
 // get user by id
-export const createCourseCollection = async (data: any, res: Response) => {
+export const createCourseCollection = async (data: object, res: Response) => {
   const course = await CourseModel.create(data);
 
   res.status(201).json({
