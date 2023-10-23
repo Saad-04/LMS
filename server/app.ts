@@ -6,6 +6,8 @@ import userRouter from './routes/user.routs';
 import courseRouter from './routes/course.routs';
 import orderRouter from './routes/order.routs';
 import notificationRouter from './routes/notification.routs';
+import analyticsRouter from './routes/analytics.routs';
+import layoutsRouter from './routes/layouts.routs';
 export const app = express();
 require('dotenv').config()
 // body-parser 
@@ -18,7 +20,7 @@ app.use(cors({
 }))
 
 // userRouter
-app.use('/api/v1', userRouter,courseRouter,orderRouter,notificationRouter)
+app.use('/api/v1', userRouter,courseRouter,orderRouter,notificationRouter,analyticsRouter,layoutsRouter)
 
 // rout for not found routs 
 app.all('*', (req: Request, res: Response, next: NextFunction) => {
