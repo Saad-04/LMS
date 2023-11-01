@@ -1,5 +1,6 @@
 import express from "express";
 import {
+  addCourseToWishList,
   addQuestionOnVideo,
   addReview,
   adminReplyReview,
@@ -31,6 +32,9 @@ courseRouter.route("/getAllCourse").get(getAllCourse);
 courseRouter
   .route("/likeCourseContent/:id")
   .put(isAuthenticated, likeCourseContent);
+courseRouter
+  .route("/addCourseToWishList")
+  .post(isAuthenticated, addCourseToWishList);
 
 // ----------------------admin routes start from here--------------------
 courseRouter

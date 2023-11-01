@@ -18,7 +18,7 @@ interface ILink extends Document {
   url: string;
 }
 
-interface ICourseData extends Document {
+export interface ICourseData extends Document {
   admin: object;
   title: string;
   description: string;
@@ -87,7 +87,7 @@ const linkSchema = new Schema<ILink>({
   title: String,
   url: String,
 });
-const courseDataSchema = new Schema<ICourseData>({
+export const courseDataSchema = new Schema<ICourseData>({
   title: String,
   description: String,
   videoUrl: String,
@@ -100,7 +100,7 @@ const courseDataSchema = new Schema<ICourseData>({
   questions: [commentSchema],
   likes: [],
 });
-const courseSchema = new Schema<ICourse>(
+export const courseSchema = new Schema<ICourse>(
   {
     admin: Object,
     name: {

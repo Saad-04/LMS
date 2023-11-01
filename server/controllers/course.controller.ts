@@ -6,13 +6,14 @@ import {
   createCourseCollection,
   getAllCoursesService,
 } from "../services/service.course";
-import CourseModel from "../models/course.model";
+import CourseModel, { ICourse } from "../models/course.model";
 import { redis } from "../utils/redis";
 import mongoose from "mongoose";
 import sendEmail from "../utils/sendMail";
 import ejs from "ejs";
 import path from "path";
 import NotificationModel from "../models/notificaton.model";
+import userModel from "../models/user.models";
 // only admin can create course
 export const createCourse = catchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -486,6 +487,80 @@ export const adminReplyReview = catchAsyncError(
     }
   }
 );
+
+export const addCourseToWishList = catchAsyncError(
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { courseId } = req.body;
+
+      const course = await CourseModel.findById(courseId) as ICourse;
+
+      const user = await userModel.findById(req.user?._id);
+
+      const courseExistWishlist = user?.wishList.some(
+        (item: any) => item._id.toString() === courseId
+      );
+      if (!user) {
+        return next(new ErrorHandler("user not found", 400));
+      }
+      if (courseExistWishlist) {
+        user.wishList = user?.wishList.filter(
+          (item: ICourse) => item._id !== courseId
+        );
+      } else {
+        user.wishList.push(course);
+      }
+
+      await course?.save();
+
+      res.status(201).json({
+        success: true,
+        user,
+      });
+    } catch (error: any) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  }
+);
+// remove course from wishlist
+// delete user  --- only for admin
+// export const removeCourseWishList = catchAsyncError(
+//   async (req: Request, res: Response, next: NextFunction) => {
+//     try {
+//       const courseId = req.body;
+
+//       const course = await CourseModel.findById(courseId);
+//       const user = await userModel.findById(req.user?._id);
+
+//       if (!course) {
+//         next(new ErrorHandler("course not found ", 404));
+//       }
+
+//       if (!user) {
+//         next(new ErrorHandler("user not found ", 404));
+//       }
+
+//       const wishlistExist = user?.wishList.some(
+//         (e) => e._id.toString() === courseId
+//       );
+
+//       if (wishlistExist) {
+//         user?.wishList = user?.wishList.filter(
+//           (item) => item._id !== courseId //if already like exist then remove it
+//         );
+//       } else {
+//         user?.wishList.push(user.user); //here we push req.user in array
+//       }
+
+//       res.status(200).json({
+//         success: false,
+//         message: "course deleted successfully",
+//       });
+//     } catch (error: any) {
+//       return next(new ErrorHandler(error.message, 404));
+//     }
+//   }
+// );
 
 // get all courses --- only for admin
 export const getAdminAllCourses = catchAsyncError(

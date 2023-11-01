@@ -1,7 +1,7 @@
 import mongoose, { Schema, Model, Document } from "mongoose";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-
+import { ICourse, ICourseData, courseDataSchema, courseSchema } from "./course.model";
 const emailRegexPattern: RegExp =
   /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
 
@@ -11,6 +11,7 @@ export interface Iuser extends Document {
   password: string;
   isVarified: boolean;
   courses: Array<{ courseId: string }>;
+  wishList: object[];
   avatar: {
     public_id: string;
     url: string;
@@ -20,7 +21,7 @@ export interface Iuser extends Document {
   SIGN_REFRESH_TOKEN: () => string;
   comparePassword: (password: string) => Promise<boolean>;
 }
-  export const userSchema: Schema<Iuser> = new mongoose.Schema(
+export const userSchema: Schema<Iuser> = new mongoose.Schema(
   {
     name: {
       type: String,
@@ -28,7 +29,7 @@ export interface Iuser extends Document {
     },
     email: {
       type: String,
-      required:true,
+      required: true,
       unique: true,
       validate: {
         validator: function (value: string) {
@@ -47,6 +48,7 @@ export interface Iuser extends Document {
       default: false,
     },
     courses: [{ courseId: String }],
+    wishList: [Object],
     role: {
       type: String,
       default: "user",
