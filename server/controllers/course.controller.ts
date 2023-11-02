@@ -488,40 +488,40 @@ export const adminReplyReview = catchAsyncError(
   }
 );
 
-export const addCourseToWishList = catchAsyncError(
-  async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const { courseId } = req.body;
+// export const addCourseToWishList = catchAsyncError(
+//   async (req: Request, res: Response, next: NextFunction) => {
+//     try {
+//       const { courseId } = req.body;
 
-      const course = await CourseModel.findById(courseId) as ICourse;
+//       const course = (await CourseModel.findById(courseId)) as ICourse;
 
-      const user = await userModel.findById(req.user?._id);
+//       const user = await userModel.findById(req.user?._id);
 
-      const courseExistWishlist = user?.wishList.some(
-        (item: any) => item._id.toString() === courseId
-      );
-      if (!user) {
-        return next(new ErrorHandler("user not found", 400));
-      }
-      if (courseExistWishlist) {
-        user.wishList = user?.wishList.filter(
-          (item: ICourse) => item._id !== courseId
-        );
-      } else {
-        user.wishList.push(course);
-      }
+//       const courseExistWishlist = user?.wishList.some(
+//         (item: any) => item._id.toString() === courseId
+//       );
+//       if (!user) {
+//         return next(new ErrorHandler("user not found", 400));
+//       }
+//       if (courseExistWishlist) {
+//         user.wishList = user?.wishList.filter(
+//           (item: ICourse) => item._id !== courseId
+//         );
+//       } else {
+//         user.wishList.push(course);
+//       }
 
-      await course?.save();
+//       await course?.save();
 
-      res.status(201).json({
-        success: true,
-        user,
-      });
-    } catch (error: any) {
-      return next(new ErrorHandler(error.message, 500));
-    }
-  }
-);
+//       res.status(201).json({
+//         success: true,
+//         user,
+//       });
+//     } catch (error: any) {
+//       return next(new ErrorHandler(error.message, 500));
+//     }
+//   }
+// );
 // remove course from wishlist
 // delete user  --- only for admin
 // export const removeCourseWishList = catchAsyncError(
