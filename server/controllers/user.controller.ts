@@ -42,6 +42,7 @@ export const registerUser = catchAsyncError(async (req: Request, res: Response, 
         success: true,
         message: `please check ${user.email} to activate acount`,
         activationToken: activationToken.token,
+        activationCode,
       });
     } catch (error: any) {
       next(new ErrorHandler(error.message, 400));
